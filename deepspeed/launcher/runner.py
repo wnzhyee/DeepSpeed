@@ -402,7 +402,11 @@ def main(args=None):
                 f"{detected_str} but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed."
             )
         else:
-            args.include = f"localhost:{cuda_visible_devices}"
+            new_cuda_visible_devices_str = ",".join(list(map(
+                str, 
+                range(len(cuda_visible_devices.split(",")))
+            )))
+            args.include = f"localhost:{new_cuda_visible_devices_str}"
             print(f"{detected_str}: setting --include={args.include}")
         del os.environ["CUDA_VISIBLE_DEVICES"]
 
